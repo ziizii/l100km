@@ -10,15 +10,6 @@ class AddRecordComponent implements OnInit {
 
   AddRecordComponent(this.drive);
 
-  @ViewChild("odometer")
-  MaterialInputComponent odometer;
-
-  @ViewChild("totalPrice")
-  MaterialInputComponent totalPrice;
-
-  @ViewChild("litres")
-  MaterialInputComponent litres;
-
   StringSelectionOptions<String> carOptions = new StringSelectionOptions([]);
   SelectionModel<String> selectedCar = new SelectionModel.withList(selectedValues: []);
   String get carSelectButtonText => selectedCar.selectedValues.isEmpty ? "Vyberte auto" : selectedCar.selectedValues.first;

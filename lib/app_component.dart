@@ -9,8 +9,6 @@ import 'package:fuelly_gdocs/add_record.dart';
 import 'package:fuelly_gdocs/all_records.dart';
 import 'package:fuelly_gdocs/google_drive.dart';
 
-import 'package:intl/date_symbol_data_local.dart';
-
 @Component(
   selector: 'my-app',
   styleUrls: const ['app_component.css'],
@@ -18,20 +16,13 @@ import 'package:intl/date_symbol_data_local.dart';
   directives: const [materialDirectives, AddRecordComponent, AllRecordsComponent],
   providers: const [materialProviders],
 )
-class AppComponent implements OnInit {
+class AppComponent {
 
   GoogleSheetsService drive;
 
-  AppComponent(this.drive) {
-  }
+  AppComponent(this.drive);
 
   login() {
     drive.login();
-  }
-
-
-  @override
-  ngOnInit() async {
-//    await initializeDateFormatting("cs", null);
   }
 }
