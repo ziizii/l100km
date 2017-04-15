@@ -5,10 +5,11 @@ version: 0.0.1
 #author: ziizii <email@example.com>
 
 environment:
-  sdk: '>=1.20.1 <2.0.0'
+#  sdk: '>=1.20.1 <2.0.0'
+  sdk: '>=1.23.0-dev.11.7'
 
 dependencies:
-  angular2: '>=3.0.0-alpha+1'
+  angular2: '>=3.0.0-beta'
   angular2_components: '>=0.4.0-alpha'
   googleapis_auth:
   googleapis:
