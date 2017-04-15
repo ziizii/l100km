@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 class CurrencyPipe extends PipeTransform {
   String transform(dynamic value) {
     if (value == null) return "";
-    return new NumberFormat.compactCurrency(name: "Kč", locale: "cs", symbol: "CZK", decimalDigits: 2).format(value);
+    return new NumberFormat.currency(name: "", locale: "cs", symbol: "", decimalDigits: 2).format(value);
   }
 }
 

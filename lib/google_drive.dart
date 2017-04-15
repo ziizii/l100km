@@ -38,17 +38,15 @@ class GoogleSheetsService {
       _sheetsApi = new sheets.SheetsApi(client);
       _driveApi = new drive.DriveApi(client);
 
-      await findSheetId();
+      findSheetId();
       loadAllRecords().then((records)=>recordStreamController.add(records));
     }
   }
 
-  String _sheetId;
-  Future<String> findSheetId() async {
-    if (_sheetId != null) {
-      return _sheetId;
-    }
+  static Completer<String> _sheetCompleter = new Completer();
+  Future<String> _sheetId = _sheetCompleter.future;
 
+  findSheetId() async {
     var allFiles = await _driveApi.files.list(q: "trashed != true and name = '${constants.spreadsheetName}'");
     var fuelSheetList = allFiles.files.where((f)=>f.name == constants.spreadsheetName);
 
@@ -60,12 +58,10 @@ class GoogleSheetsService {
       newSpreadsheet.properties..title = constants.spreadsheetName;
 
       var createdSheet = await _sheetsApi.spreadsheets.create(newSpreadsheet);
-      _sheetId = createdSheet.spreadsheetId;
+      _sheetCompleter.complete(createdSheet.spreadsheetId);
     } else {
-      _sheetId = fuelSheetList.first.id;
+      _sheetCompleter.complete(fuelSheetList.first.id);
     }
-
-    return _sheetId;
   }
 
   sheets.Sheet _createCarsSheet() {
@@ -126,7 +122,7 @@ class GoogleSheetsService {
   }
 
   Future<List<String>> listCars() async {
-    var id = await findSheetId();
+    var id = await _sheetId;
     var range = "'${constants.Cars.sheetName}'!A:A";
     sheets.ValueRange carsColumn = await _sheetsApi.spreadsheets.values.get(id, range, majorDimension: "COLUMNS");
 
@@ -135,19 +131,19 @@ class GoogleSheetsService {
   }
 
   createNewCar(String newCarName) async {
-    var id = await findSheetId();
+    var id = await _sheetId;
 
     var valueRange = new sheets.ValueRange();
     valueRange.values = [[newCarName]];
     
-    _sheetsApi.spreadsheets.values.append(valueRange, id, "'${constants.Cars.sheetName}'!A:A", valueInputOption: "USER_ENTERED");
+    await _sheetsApi.spreadsheets.values.append(valueRange, id, "'${constants.Cars.sheetName}'!A:A", valueInputOption: "USER_ENTERED");
   }
 
   static final StreamController<List<Record>> recordStreamController = new StreamController<List<Record>>.broadcast();
   Stream<List<Record>> get onRecord => recordStreamController.stream;
 
   Future<List<Record>> loadAllRecords() async {
-    var id = await findSheetId();
+    var id = await _sheetId;
 
     var values = await _sheetsApi.spreadsheets.values.get(id, "'${constants.FuelUps.sheetName}'!A:F");
     print(values.values.first);
@@ -181,7 +177,7 @@ class GoogleSheetsService {
   }
 
   addRecord(Record record) async {
-    var id = await findSheetId();
+    var id = await _sheetId;
 
     var valueRange = new sheets.ValueRange();
     valueRange.values = [[

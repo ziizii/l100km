@@ -1,14 +1,14 @@
 
 
-<table class="stats" *ngIf="allRecords.isNotEmpty">
+<table class="stats" *ngIf="allRecords.length > 1">
     <tbody>
     <tr>
         <th>Průměr</th><td>{{totall100Km | km}} l/100km</td>
         <th>Celkem</th><td>{{totalLitres | km}} l</td>
     </tr>
     <tr>
-        <th>Průměr</th><td>{{avgPricePerKm | currency}} Kč/km</td>
-        <th>Celkem</th><td>{{totalPrice | currency}}</td>
+        <th>Průměr</th><td>{{avgPricePerKm | currency}}Kč/km</td>
+        <th>Celkem</th><td>{{totalPrice | currency}}Kč</td>
     </tr>
     <tr>
         <th>Nejlepší</th><td>{{bestl100Km | km}} l/100km</td>

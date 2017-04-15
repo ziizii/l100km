@@ -41,15 +41,21 @@ class AddRecordComponent implements OnInit {
   String priceValue;
   String lValue;
 
-  addRecord() async {
-    var rec = new Record(
-      odo: int.parse(odoValue),
-      litres:  double.parse(lValue),
-      totalPrice: double.parse(priceValue),
-      car: selectedCar.selectedValues.first,
-    );
+  String error;
 
-    drive.addRecord(rec);
+  addRecord() async {
+    try {
+      var rec = new Record(
+        odo: int.parse(odoValue),
+        litres:  double.parse(lValue),
+        totalPrice: double.parse(priceValue),
+        car: selectedCar.selectedValues.first,
+      );
+      drive.addRecord(rec);
+      error = "";
+    } catch (e) {
+      error = "Vytvoření záznamu se nezdařilo. Ujistěte se, že stav tachometru je celé číslo, počet litrů a cena může být desetinné a že máte vybrané auto.";
+    }
   }
 
 }
