@@ -1,0 +1,27 @@
+<div *ngIf="!carOptions.isNotEmpty">
+    <p>Zatím není vytvořené žádné auto.</p>
+
+    <material-input label="Vytvořte nové auto" floatingLabel="true" (inputKeyPress)="namedCar($event)"></material-input>
+    <material-button (trigger)="createNewCar()" raised class="blue" *ngIf="!newCar.isEmpty">
+        Vytvořit auto
+    </material-button>
+
+</div>
+
+
+<div *ngIf="carOptions.isNotEmpty">
+
+    <form (ngSubmit)="addRecord()" #recordForm="ngForm">
+        <material-dropdown-select required [options]="carOptions" [selection]="selectedCar" width="2" [buttonText]="carSelectButtonText">
+        </material-dropdown-select>
+        <div>
+            <material-input #odometer required ngControl="odo" [(ngModel)]="odoValue" trailingText="km" label="Stav tachometru" floatingLabel="true" type="number"></material-input>
+            <material-input #totalPrice required ngControl="price" [(ngModel)]="priceValue" trailingText="Kč" label="Celková cena" floatingLabel="true" type="number"></material-input>
+            <material-input #litres required ngControl="litres" [(ngModel)]="lValue" trailingText="l" label="Počet litrů" floatingLabel="true" type="number"></material-input>
+
+            <material-button [disabled]="!recordForm.form.valid" (trigger)="addRecord()" raised class="blue">
+                Přidat plnou nádrž
+            </material-button>
+        </div>
+    </form>
+</div>

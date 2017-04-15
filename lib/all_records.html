@@ -1,0 +1,52 @@
+
+
+<table class="stats" *ngIf="allRecords.isNotEmpty">
+    <tbody>
+    <tr>
+        <th>Průměr</th><td>{{totall100Km | km}} l/100km</td>
+        <th>Celkem</th><td>{{totalLitres | km}} l</td>
+    </tr>
+    <tr>
+        <th>Průměr</th><td>{{avgPricePerKm | currency}} Kč/km</td>
+        <th>Celkem</th><td>{{totalPrice | currency}}</td>
+    </tr>
+    <tr>
+        <th>Nejlepší</th><td>{{bestl100Km | km}} l/100km</td>
+        <th>Celkem</th><td>{{totalKm | km}} km</td>
+    </tr>
+    <tr>
+    </tr>
+    <tr>
+    </tr>
+    <tr>
+    </tr>
+    </tbody>
+</table>
+
+
+
+
+<table>
+    <thead>
+    <tr>
+        <!--<th>Auto</th>-->
+        <th>Datum</th>
+        <th>Litrů</th>
+        <th>Cena [Kč/l]</th>
+        <th>Stav tachometru [km]</th>
+        <th>Spotřeba [l/100km]</th>
+        <!--<th>Poloha</th>-->
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let r of allRecords">
+        <!--<td>{{r.car}}</td>-->
+        <td>{{r.date | date}}</td>
+        <td>{{r.litres | km}}</td>
+        <td>{{r.price | currency}}</td>
+        <td>{{r.odo | km}}</td>
+        <td>{{r.l100Km | km}}</td>
+        <!--<td>{{r.location}}</td>-->
+    </tr>
+    </tbody>
+</table>

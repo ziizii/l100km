@@ -1,0 +1,35 @@
+table {
+    /*table-layout: fixed;*/
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+td {
+    text-align: right;
+}
+
+th {
+    text-align: center;
+}
+
+td, th {
+    padding: 5px;
+}
+
+.stats td, .stats th {
+    width: 8em;
+}
+
+
+table, th, td {
+    border: 1px solid #dddddd;
+}
+
+.stats th {
+    text-align: right;
+}
+
+.stats td {
+    text-align: left;
+}

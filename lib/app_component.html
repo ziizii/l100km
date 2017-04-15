@@ -1,0 +1,12 @@
+
+<div *ngIf="!drive.isLoggedIn">
+    <material-button raised (trigger)="login()" class="blue">Log In</material-button>
+</div>
+
+<div *ngIf="drive.isLoggedIn">
+    <add-record></add-record>
+
+    <all-records></all-records>
+</div>
+
+

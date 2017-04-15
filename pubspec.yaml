@@ -1,0 +1,28 @@
+name: fuelly_gdocs
+description: A web app that uses AngularDart Components
+version: 0.0.1
+#homepage: https://www.example.com
+#author: ziizii <email@example.com>
+
+environment:
+  sdk: '>=1.20.1 <2.0.0'
+
+dependencies:
+  angular2: '>=3.0.0-alpha+1'
+  angular2_components: '>=0.4.0-alpha'
+  googleapis_auth:
+  googleapis:
+  intl:
+  
+dev_dependencies:
+  browser:
+  dart_to_js_script_rewriter:
+
+transformers:
+- angular2:
+    platform_directives:
+    - 'package:angular2/common.dart#COMMON_DIRECTIVES'
+    platform_pipes:
+    - 'package:angular2/common.dart#COMMON_PIPES'
+    entry_points: web/main.dart
+- dart_to_js_script_rewriter
