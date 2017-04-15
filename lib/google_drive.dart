@@ -1,11 +1,9 @@
 import 'dart:async';
 
-import 'dart:convert';
-import 'dart:html';
 import 'package:angular2/core.dart';
 import 'package:fuelly_gdocs/constants.dart' as constants;
-import 'package:googleapis/sheets/v4.dart' as sheets;
 import 'package:googleapis/drive/v3.dart' as drive;
+import 'package:googleapis/sheets/v4.dart' as sheets;
 import 'package:googleapis_auth/auth_browser.dart' as auth;
 import 'package:intl/intl.dart';
 
@@ -41,6 +39,7 @@ class GoogleSheetsService {
       _driveApi = new drive.DriveApi(client);
 
       await findSheetId();
+      loadAllRecords().then((records)=>recordStreamController.add(records));
     }
   }
 
@@ -52,20 +51,15 @@ class GoogleSheetsService {
 
     var allFiles = await _driveApi.files.list(q: "trashed != true and name = '${constants.spreadsheetName}'");
     var fuelSheetList = allFiles.files.where((f)=>f.name == constants.spreadsheetName);
-    fuelSheetList.forEach((f)=>print(f.toJson()));
 
     if (fuelSheetList.isEmpty) {
-      print("Creating new sheet");
       var newSpreadsheet = new sheets.Spreadsheet();
       newSpreadsheet.sheets = [_createFuelupsSheet(), _createCarsSheet()];
 
       newSpreadsheet.properties = new sheets.SpreadsheetProperties();
-      newSpreadsheet.properties..title = constants.spreadsheetName
-        ..defaultFormat = (new sheets.CellFormat()..backgroundColor = (new sheets.Color()..blue=0.1 ..green=0.1 ..red=0.1 ..alpha=0.1));
+      newSpreadsheet.properties..title = constants.spreadsheetName;
 
-      print(newSpreadsheet.properties.toJson());
       var createdSheet = await _sheetsApi.spreadsheets.create(newSpreadsheet);
-
       _sheetId = createdSheet.spreadsheetId;
     } else {
       _sheetId = fuelSheetList.first.id;
@@ -90,7 +84,6 @@ class GoogleSheetsService {
       constants.FuelUps.headerLitres,
       constants.FuelUps.headerPrice,
       constants.FuelUps.headerOdo,
-      constants.FuelUps.headerLocation,
     ]);
     return fuelupsSheet;
   }
@@ -150,13 +143,14 @@ class GoogleSheetsService {
     _sheetsApi.spreadsheets.values.append(valueRange, id, "'${constants.Cars.sheetName}'!A:A", valueInputOption: "USER_ENTERED");
   }
 
+  static final StreamController<List<Record>> recordStreamController = new StreamController<List<Record>>.broadcast();
+  Stream<List<Record>> get onRecord => recordStreamController.stream;
+
   Future<List<Record>> loadAllRecords() async {
     var id = await findSheetId();
 
     var values = await _sheetsApi.spreadsheets.values.get(id, "'${constants.FuelUps.sheetName}'!A:F");
     print(values.values.first);
-    var locationIndex = values.values.first.indexOf(constants.FuelUps.headerLocation);
-//    var l100kmIndex = values.values.first.indexOf(constants.FuelUps.headerL100km);
     var odoIndex = values.values.first.indexOf(constants.FuelUps.headerOdo);
     var priceIndex = values.values.first.indexOf(constants.FuelUps.headerPrice);
     var litresIndex = values.values.first.indexOf(constants.FuelUps.headerLitres);
@@ -166,9 +160,7 @@ class GoogleSheetsService {
     var dateFormat = new DateFormat("y-M-d H:m:s");
 
     var records = values.values.skip(1).map((List row) {
-      var location = row.length >= locationIndex + 1 ? row[locationIndex] : null;
       return new Record(
-          location: location,
           odo: int.parse(row[odoIndex]),
           price: double.parse(row[priceIndex]),
           litres: double.parse(row[litresIndex]),
@@ -188,30 +180,7 @@ class GoogleSheetsService {
     return records.reversed.toList();
   }
 
-
-  /*
-      constants.FuelUps.headerCar,
-      constants.FuelUps.headerDate,
-      constants.FuelUps.headerLitres,
-      constants.FuelUps.headerPrice,
-      constants.FuelUps.headerOdo,
-      constants.FuelUps.headerL100km,
-      constants.FuelUps.headerLocation,
-   */
   addRecord(Record record) async {
-    var timeout = new Duration(seconds: 5);
-    var maxAge = new Duration(minutes: 10);
-
-    var location;
-    var currentPositionFuture = window.navigator.geolocation.getCurrentPosition(enableHighAccuracy: false, timeout: timeout, maximumAge: maxAge);
-    
-    try {
-      location = await currentPositionFuture;
-    } catch (e) {
-      print(e);
-    }
-
-
     var id = await findSheetId();
 
     var valueRange = new sheets.ValueRange();
@@ -220,12 +189,11 @@ class GoogleSheetsService {
       record.date.toLocal().toString(),
       record.litres,
       record.totalPrice / record.litres,
-      record.odo,
-      location?.coords != null ? "${location.coords.latitude},${location.coords.longitude}" : null
+      record.odo
     ]];
 
-    _sheetsApi.spreadsheets.values.append(valueRange, id, "'${constants.FuelUps.sheetName}'!A:G", valueInputOption: "USER_ENTERED");
-
+    await _sheetsApi.spreadsheets.values.append(valueRange, id, "'${constants.FuelUps.sheetName}'!A:G", valueInputOption: "USER_ENTERED");
+    loadAllRecords().then((records)=>recordStreamController.add(records));
   }
     
 }
@@ -240,7 +208,6 @@ class Record {
   DateTime date;
   String car;
 
-
   Record({this.location, this.l100Km, this.odo, this.price, this.litres, this.date, this.car, this.totalPrice}) {
     if (date == null) {
       date = new DateTime.now();
@@ -251,6 +218,4 @@ class Record {
   String toString() {
     return 'Record{location: $location, l100Km: $l100Km, odo: $odo, price: $price, litres: $litres, date: $date, car: $car}';
   }
-
-
 }

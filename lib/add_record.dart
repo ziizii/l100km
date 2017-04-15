@@ -1,10 +1,9 @@
-import 'dart:async';
 import 'package:angular2/core.dart';
 import 'package:angular2_components/angular2_components.dart';
 import 'package:fuelly_gdocs/google_drive.dart';
 
 @Component(selector: 'add-record')
-@View(templateUrl: "add_record.html", directives: const [materialDirectives])
+@View(templateUrl: "add_record.html", directives: const [materialDirectives], styleUrls: const ['common.css'])
 class AddRecordComponent implements OnInit {
   GoogleSheetsService drive;
 
@@ -38,15 +37,15 @@ class AddRecordComponent implements OnInit {
     carOptions = new StringSelectionOptions(await drive.listCars());
   }
 
-  int odoValue;
-  double priceValue;
-  double lValue;
+  String odoValue;
+  String priceValue;
+  String lValue;
 
   addRecord() async {
     var rec = new Record(
-      odo: odoValue,
-      litres:  lValue,
-      totalPrice: priceValue,
+      odo: int.parse(odoValue),
+      litres:  double.parse(lValue),
+      totalPrice: double.parse(priceValue),
       car: selectedCar.selectedValues.first,
     );
 

@@ -8,6 +8,7 @@ class Cars {
 
   static const String headerName = "Jméno";
 }
+
 class FuelUps {
   static const String sheetName = "Plné nádrže";
 
@@ -16,8 +17,4 @@ class FuelUps {
   static const String headerLitres = "Litrů";
   static const String headerPrice = "Cena";
   static const String headerCar = "Auto";
-  static const String headerL100km = "l/100km";
-  static const String headerLocation = "Poloha";
-
-//  car_name, model, l/100km,  odometer, km, litres, price, city_percentage, fuelup_date, date_added, tags, notes, missed_fuelup, partial_fuelup, latitude, longitude, brand
 }

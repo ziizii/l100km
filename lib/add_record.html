@@ -1,16 +1,13 @@
 <div *ngIf="!carOptions.isNotEmpty">
     <p>Zatím není vytvořené žádné auto.</p>
 
-    <material-input label="Vytvořte nové auto" floatingLabel="true" (inputKeyPress)="namedCar($event)"></material-input>
+    <material-input label="Pojmenujte auto" floatingLabel="true" (inputKeyPress)="namedCar($event)"></material-input>
     <material-button (trigger)="createNewCar()" raised class="blue" *ngIf="!newCar.isEmpty">
-        Vytvořit auto
+        Vytvořit nové auto
     </material-button>
-
 </div>
 
-
 <div *ngIf="carOptions.isNotEmpty">
-
     <form (ngSubmit)="addRecord()" #recordForm="ngForm">
         <material-dropdown-select required [options]="carOptions" [selection]="selectedCar" width="2" [buttonText]="carSelectButtonText">
         </material-dropdown-select>

@@ -8,7 +8,7 @@ import 'dart:math';
 @View(templateUrl: 'all_records.html',
     directives: const [materialDirectives],
     pipes: const [CurrencyPipe, DistancePipe, DatePipe],
-    styleUrls: const ['all_records.css']
+    styleUrls: const ['all_records.css', 'common.css']
 )
 class AllRecordsComponent implements OnInit {
   GoogleSheetsService drive;
@@ -19,7 +19,7 @@ class AllRecordsComponent implements OnInit {
 
   @override
   ngOnInit() async {
-    allRecords = await drive.loadAllRecords();
+     drive.onRecord.listen((records)=>allRecords = records);
   }
 
   int get totalKm {

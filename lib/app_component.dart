@@ -11,7 +11,7 @@ import 'package:fuelly_gdocs/google_drive.dart';
 
 @Component(
   selector: 'my-app',
-  styleUrls: const ['app_component.css'],
+  styleUrls: const ['app_component.css', 'common.css'],
   templateUrl: 'app_component.html',
   directives: const [materialDirectives, AddRecordComponent, AllRecordsComponent],
   providers: const [materialProviders],
