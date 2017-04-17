@@ -50,3 +50,7 @@ table, th, td {
     font-size: larger;
     font-weight: bolder;
 }
+
+.allRecords {
+    margin-bottom: 4em;
+}

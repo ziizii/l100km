@@ -8,26 +8,36 @@
 </div>
 
 <div *ngIf="carOptions.isNotEmpty">
-
-    <material-fab mini raised (trigger)="showAddForm()" #addButton id="addButton" class="pull-right" >
+    <material-fab raised (trigger)="showAddForm()" #addButton id="addButton" *ngIf="!showAddRecordModal" >
         <glyph icon="add"></glyph>
     </material-fab>
 
-    <p class="error" *ngIf="error != null && !error.isEmpty">{{error}}</p>
-    <form (ngSubmit)="addRecord()" #recordForm="ngForm" style="display: none" id="recordForm">
-        <material-dropdown-select required [options]="carOptions" [selection]="selectedCar" width="2" [buttonText]="carSelectButtonText">
-        </material-dropdown-select>
-        <div>
-            <material-input #odometer required ngControl="odo" [(ngModel)]="odoValue" trailingText="km" label="Stav tachometru" floatingLabel="true" type="number"></material-input>
-            <material-input #totalPrice required ngControl="price" [(ngModel)]="priceValue" trailingText="Kč" label="Celková cena" floatingLabel="true" type="number"></material-input>
-            <material-input #litres required ngControl="litres" [(ngModel)]="lValue" trailingText="l" label="Počet litrů" floatingLabel="true" type="number"></material-input>
+    <modal [visible]="showAddRecordModal">
+        <material-dialog class="basic-dialog">
+            <h3 header>Přidat plnou nádrž</h3>
 
-            <material-button [disabled]="!recordForm.form.valid" (trigger)="addRecord()" raised class="blue">
-                Přidat plnou nádrž
-            </material-button>
+            <p class="error" *ngIf="error != null && !error.isEmpty">{{error}}</p>
+            
+            <form (ngSubmit)="addRecord()" #recordForm="ngForm" id="recordForm">
+                <material-dropdown-select required [options]="carOptions" [selection]="selectedCar" width="2" [buttonText]="carSelectButtonText">
+                </material-dropdown-select>
+                <div>
+                    <material-input autoFocus #odometer required ngControl="odo" [(ngModel)]="odoValue" trailingText="km" label="Stav tachometru" floatingLabel="true" type="number"></material-input>
+                    <material-input #totalPrice required ngControl="price" [(ngModel)]="priceValue" trailingText="Kč" label="Celková cena" floatingLabel="true" type="number"></material-input>
+                    <material-input #litres required ngControl="litres" [(ngModel)]="lValue" trailingText="l" label="Počet litrů" floatingLabel="true" type="number"></material-input>
+                </div>
 
-            <material-button (trigger)="hideAddForm()" raised>Storno</material-button>
+            </form>
 
-        </div>
-    </form>
+            <div footer>
+                <material-button  [disabled]="!recordForm.form.valid" (trigger)="addRecord()" raised class="blue">
+                    Přidat plnou nádrž
+                </material-button>
+
+                <material-button (trigger)="hideAddForm()" raised>Zavřít</material-button>
+
+            </div>
+
+        </material-dialog>
+    </modal>
 </div>

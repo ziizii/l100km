@@ -10,9 +10,19 @@ class AddRecordComponent implements OnInit {
 
   AddRecordComponent(this.drive);
 
+  @ViewChild("odometer")
+  MaterialInputComponent odometer;
+
+  @ViewChild("totalPrice")
+  MaterialInputComponent totalPrice;
+
+  @ViewChild("litres")
+  MaterialInputComponent litres;
+
   StringSelectionOptions<String> carOptions = new StringSelectionOptions([]);
   SelectionModel<String> selectedCar = new SelectionModel.withList(selectedValues: []);
   String get carSelectButtonText => selectedCar.selectedValues.isEmpty ? "Vyberte auto" : selectedCar.selectedValues.first;
+  bool showAddRecordModal = false;
 
   String newCar = "";
   namedCar(String inputText) {
@@ -28,17 +38,23 @@ class AddRecordComponent implements OnInit {
   HtmlElement get addRecordButton => (querySelector("#addButton") as HtmlElement);
 
   showAddForm() {
-    hide(addRecordButton);
-    show(addRecordForm);
+    showAddRecordModal = true;
+    odometer.focus();
+
+    var odoInput = (odometer.inputRef.nativeElement as InputElement);
+    odoInput.type = "number";
+    odoInput.pattern = "[0-9]*";
+
+    var priceInput = (totalPrice.inputRef.nativeElement as InputElement);
+    priceInput.type = "number";
+
+    var litresInput = (litres.inputRef.nativeElement as InputElement);
+    litresInput.type = "number";
   }
   hideAddForm() {
-    hide(addRecordForm);
-    show(addRecordButton);
+    showAddRecordModal = false;
     addRecordForm.reset();
   }
-
-  show(HtmlElement el) => el.style.display = "block";
-  hide(HtmlElement el) => el.style.display = "none";
 
   @override
   ngOnInit() async {
