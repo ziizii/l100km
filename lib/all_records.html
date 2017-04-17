@@ -3,44 +3,35 @@
 <table class="stats" *ngIf="allRecords.length > 1">
     <tbody>
     <tr>
-        <th>Průměr</th><td>{{totall100Km | km}} l/100km</td>
-        <th>Celkem</th><td>{{totalLitres | km}} l</td>
+        <th>Průměr</th><td>{{totall100Km | km}}&nbsp;l/100km</td>
+        <th>Celkem</th><td>{{totalLitres | litres}}&nbsp;l</td>
     </tr>
     <tr>
-        <th>Průměr</th><td>{{avgPricePerKm | currency}}Kč/km</td>
-        <th>Celkem</th><td>{{totalPrice | currency}}Kč</td>
+        <th>Průměr</th><td>{{avgPricePerKm | currency}}&nbsp;Kč/km</td>
+        <th>Celkem</th><td>{{totalPrice | currency}}&nbsp;Kč</td>
     </tr>
     <tr>
-        <th>Nejlepší</th><td>{{bestl100Km | km}} l/100km</td>
-        <th>Celkem</th><td>{{totalKm | km}} km</td>
+        <th>Nejlepší</th><td>{{bestl100Km | litres}}&nbsp;l/100km</td>
+        <th>Celkem</th><td>{{totalKm | km}}&nbsp;km</td>
     </tr>
     </tbody>
 </table>
 
 
+<div class="allRecords">
+    <div *ngFor="let r of allRecords" class="record">
+        <div class="date">
+            <span><glyph icon="local_gas_station" size="medium"></glyph> {{r.date | date}}</span>
+            <strong class="pull-right"><glyph size="medium" icon="directions_car"></glyph> {{r.odo | km}}&nbsp;km</strong>
+        </div>
+        <div>
+            <span class="price">Celkem {{r.litres | litres}}&nbsp;l * {{r.price | currency}}&nbsp;Kč/l <strong class="pull-right">{{r.litres * r.price | currency}}&nbsp;Kč</strong></span>
+        </div>
+        <div *ngIf="r.l100Km != null">
+            Spotřeba <strong class="pull-right">{{r.l100Km | litres}}&nbsp;l/100km</strong>
+        </div>
 
+        <div class="clear"></div>
+    </div>
+</div>
 
-<table>
-    <thead>
-    <tr>
-        <!--<th>Auto</th>-->
-        <th>Datum</th>
-        <th>Litrů</th>
-        <th>Cena [Kč/l]</th>
-        <th>Stav tachometru [km]</th>
-        <th>Spotřeba [l/100km]</th>
-        <!--<th>Poloha</th>-->
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let r of allRecords">
-        <!--<td>{{r.car}}</td>-->
-        <td>{{r.date | date}}</td>
-        <td>{{r.litres | km}}</td>
-        <td>{{r.price | currency}}</td>
-        <td>{{r.odo | km}}</td>
-        <td>{{r.l100Km | km}}</td>
-        <!--<td>{{r.location}}</td>-->
-    </tr>
-    </tbody>
-</table>

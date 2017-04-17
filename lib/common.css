@@ -6,3 +6,13 @@
 .error {
     color: red;
 }
+
+.pull-right {
+    float: right;
+}
+.pull-left {
+    float: left;;
+}
+.clear {
+    clear: both;
+}

@@ -1,6 +1,6 @@
 table {
     /*table-layout: fixed;*/
-    width: 100%;
+    /*width: 100%;*/
     border-collapse: collapse;
     margin-top: 20px;
 }
@@ -18,12 +18,12 @@ td, th {
 }
 
 .stats td, .stats th {
-    width: 8em;
+    /*width: 8em;*/
 }
 
 
 table, th, td {
-    border: 1px solid #dddddd;
+    border: 0px solid #dddddd;
 }
 
 .stats th {
@@ -32,4 +32,22 @@ table, th, td {
 
 .stats td {
     text-align: left;
+}
+
+
+.record {
+    width: 100%;
+    padding: 0.5em;
+    border: 1px solid #dddddd;
+    border-top: 0;
+}
+
+.record:first-child {
+    margin-top: 2em;
+    border-top: 1px solid #dddddd;
+}
+
+.record .date {
+    font-size: larger;
+    font-weight: bolder;
 }

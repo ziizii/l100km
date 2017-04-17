@@ -6,7 +6,8 @@ import 'package:intl/intl.dart';
 class CurrencyPipe extends PipeTransform {
   String transform(dynamic value) {
     if (value == null) return "";
-    return new NumberFormat.currency(name: "", locale: "cs", symbol: "", decimalDigits: 2).format(value);
+    return new NumberFormat("###,###,##0.00", "cs").format(value);
+//    return new NumberFormat.currency(name: "", locale: "cs", symbol: "", decimalDigits: 2).format(value);
   }
 }
 
@@ -14,7 +15,18 @@ class CurrencyPipe extends PipeTransform {
 class DistancePipe extends PipeTransform {
   String transform(dynamic value) {
     if (value == null) return "";
-    return new NumberFormat.decimalPattern("cs").format(value);
+    return new NumberFormat("###,###,##0", "cs").format(value);
+  }
+}
+
+
+
+
+@Pipe("litres")
+class LitresPipe extends PipeTransform {
+  String transform(dynamic value) {
+    if (value == null) return "";
+    return new NumberFormat("###,###,##0.0", "cs").format(value);
   }
 }
 
