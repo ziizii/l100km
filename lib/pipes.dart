@@ -7,7 +7,6 @@ class CurrencyPipe extends PipeTransform {
   String transform(dynamic value) {
     if (value == null) return "";
     return new NumberFormat("###,###,##0.00", "cs").format(value);
-//    return new NumberFormat.currency(name: "", locale: "cs", symbol: "", decimalDigits: 2).format(value);
   }
 }
 
@@ -19,9 +18,6 @@ class DistancePipe extends PipeTransform {
   }
 }
 
-
-
-
 @Pipe("litres")
 class LitresPipe extends PipeTransform {
   String transform(dynamic value) {
@@ -30,13 +26,10 @@ class LitresPipe extends PipeTransform {
   }
 }
 
-
-
-
 @Pipe("date")
 class DatePipe extends PipeTransform {
   String transform(dynamic value) {
     if (value == null) return "";
-    return new DateFormat("dd.MM.yyyy").format(value);
+    return new DateFormat("d. M. yyyy").format(value);
   }
 }

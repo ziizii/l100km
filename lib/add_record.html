@@ -8,8 +8,13 @@
 </div>
 
 <div *ngIf="carOptions.isNotEmpty">
+
+    <material-fab mini raised (trigger)="showAddForm()" #addButton id="addButton" class="pull-right" >
+        <glyph icon="add"></glyph>
+    </material-fab>
+
     <p class="error" *ngIf="error != null && !error.isEmpty">{{error}}</p>
-    <form (ngSubmit)="addRecord()" #recordForm="ngForm">
+    <form (ngSubmit)="addRecord()" #recordForm="ngForm" style="display: none" id="recordForm">
         <material-dropdown-select required [options]="carOptions" [selection]="selectedCar" width="2" [buttonText]="carSelectButtonText">
         </material-dropdown-select>
         <div>
@@ -20,6 +25,9 @@
             <material-button [disabled]="!recordForm.form.valid" (trigger)="addRecord()" raised class="blue">
                 Přidat plnou nádrž
             </material-button>
+
+            <material-button (trigger)="hideAddForm()" raised>Storno</material-button>
+
         </div>
     </form>
 </div>

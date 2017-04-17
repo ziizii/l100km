@@ -33,10 +33,10 @@ class AllRecordsComponent implements OnInit {
   double get totalLitres => allRecords.map((r)=>r.litres).reduce(sum);
   double get totalPrice => allRecords.map((r)=>r.litres*r.price).reduce(sum);
   double get lastl100Km => allRecords.first.l100Km;
-  double get bestl100Km => allRecords.map((r)=> r.l100Km == null ? 999999999 : r.l100Km ).reduce(min);
+  double get bestl100Km => allRecords.map((r)=> r.l100Km == null ? double.INFINITY : r.l100Km ).reduce(min);
 
   double get totall100Km => (totalLitres - firstFuelup.litres) / totalKm * 100;
-  double get avgPricePerKm => (totalPrice - firstFuelup.price) / totalKm;
+  double get avgPricePerKm => (totalPrice - firstFuelup.price*firstFuelup.litres) / totalKm;
 
   double sum(num a, num b) => a.toDouble() + b.toDouble();
 }

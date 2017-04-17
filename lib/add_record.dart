@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'package:angular2/core.dart';
 import 'package:angular2_components/angular2_components.dart';
 import 'package:fuelly_gdocs/google_drive.dart';
@@ -22,6 +23,22 @@ class AddRecordComponent implements OnInit {
     await drive.createNewCar(newCar);
     await loadCars();
   }
+
+  FormElement get addRecordForm => (querySelector("#recordForm") as FormElement);
+  HtmlElement get addRecordButton => (querySelector("#addButton") as HtmlElement);
+
+  showAddForm() {
+    hide(addRecordButton);
+    show(addRecordForm);
+  }
+  hideAddForm() {
+    hide(addRecordForm);
+    show(addRecordButton);
+    addRecordForm.reset();
+  }
+
+  show(HtmlElement el) => el.style.display = "block";
+  hide(HtmlElement el) => el.style.display = "none";
 
   @override
   ngOnInit() async {
@@ -51,7 +68,9 @@ class AddRecordComponent implements OnInit {
         totalPrice: double.parse(priceValue),
         car: selectedCar.selectedValues.first,
       );
-      drive.addRecord(rec);
+      await drive.addRecord(rec);
+      hideAddForm();
+
       error = "";
     } catch (e) {
       error = "Vytvoření záznamu se nezdařilo. Ujistěte se, že stav tachometru je celé číslo, počet litrů a cena může být desetinné a že máte vybrané auto.";

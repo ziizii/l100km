@@ -1,6 +1,10 @@
 
+<h1>Statistika spotřeby</h1>
+
+<indicator></indicator>
+
+
 <div *ngIf="!drive.isLoggedIn">
-    <h1>Statistika spotřeby</h1>
     <p>Pro zadávání údajů je potřeba se přihlásit pomocí Google účtu a povolit připojeni k Disku Google a Tabulkám Google.
         Aplikace vytvoří tabulku "Spotřeba", do které se budou ukládat všechna data.</p>
     <material-button raised (trigger)="login()" class="blue">Přihlásit se pomocí Google účtu</material-button>

@@ -8,12 +8,13 @@ import 'package:angular2_components/angular2_components.dart';
 import 'package:fuelly_gdocs/add_record.dart';
 import 'package:fuelly_gdocs/all_records.dart';
 import 'package:fuelly_gdocs/google_drive.dart';
+import 'package:fuelly_gdocs/indicator.dart';
 
 @Component(
   selector: 'my-app',
   styleUrls: const ['app_component.css', 'common.css'],
   templateUrl: 'app_component.html',
-  directives: const [materialDirectives, AddRecordComponent, AllRecordsComponent],
+  directives: const [materialDirectives, AddRecordComponent, AllRecordsComponent, Indicator],
   providers: const [materialProviders],
 )
 class AppComponent {

@@ -10,6 +10,12 @@ import 'package:intl/intl.dart';
 @Injectable()
 class GoogleSheetsService {
 
+  static final StreamController _requestStart = new StreamController.broadcast();
+  static final StreamController _requestEnd = new StreamController.broadcast();
+
+  Stream get onRequestStart => _requestStart.stream;
+  Stream get onRequestEnd => _requestEnd.stream;
+
   static const scopes = const [sheets.SheetsApi.SpreadsheetsScope, drive.DriveApi.DriveReadonlyScope];
   sheets.SheetsApi _sheetsApi;
   drive.DriveApi _driveApi;
@@ -23,12 +29,17 @@ class GoogleSheetsService {
   }
 
   Future<auth.AutoRefreshingAuthClient> authorizedClient({immediate: true}) async {
-    var flow = await auth.createImplicitBrowserFlow(id, scopes);
-    var client = flow.clientViaUserConsent(immediate: immediate);
-    client
-        .then((_) => isLoggedIn = true)
-        .catchError((e) => print(e));
-    return client;
+    startRequest();
+    try {
+      var flow = await auth.createImplicitBrowserFlow(id, scopes);
+      var client = flow.clientViaUserConsent(immediate: immediate);
+      client
+          .then((_) => isLoggedIn = true)
+          .catchError((e) => print(e));
+      return client;
+    } finally {
+      endRequest();
+    }
   }
 
   login({withPopup: true}) async {
@@ -47,21 +58,34 @@ class GoogleSheetsService {
   Future<String> _sheetId = _sheetCompleter.future;
 
   findSheetId() async {
-    var allFiles = await _driveApi.files.list(q: "trashed != true and name = '${constants.spreadsheetName}'");
-    var fuelSheetList = allFiles.files.where((f)=>f.name == constants.spreadsheetName);
+    startRequest();
+    try {
+      var allFiles = await _driveApi.files.list(q: "trashed != true and name = '${constants.spreadsheetName}'");
+      var fuelSheetList = allFiles.files.where((f)=>f.name == constants.spreadsheetName);
 
-    if (fuelSheetList.isEmpty) {
-      var newSpreadsheet = new sheets.Spreadsheet();
-      newSpreadsheet.sheets = [_createFuelupsSheet(), _createCarsSheet()];
+      if (fuelSheetList.isEmpty) {
+        var newSpreadsheet = new sheets.Spreadsheet();
+        newSpreadsheet.sheets = [_createFuelupsSheet(), _createCarsSheet()];
 
-      newSpreadsheet.properties = new sheets.SpreadsheetProperties();
-      newSpreadsheet.properties..title = constants.spreadsheetName;
+        newSpreadsheet.properties = new sheets.SpreadsheetProperties();
+        newSpreadsheet.properties..title = constants.spreadsheetName;
 
-      var createdSheet = await _sheetsApi.spreadsheets.create(newSpreadsheet);
-      _sheetCompleter.complete(createdSheet.spreadsheetId);
-    } else {
-      _sheetCompleter.complete(fuelSheetList.first.id);
+        var createdSheet = await _sheetsApi.spreadsheets.create(newSpreadsheet);
+        _sheetCompleter.complete(createdSheet.spreadsheetId);
+      } else {
+        _sheetCompleter.complete(fuelSheetList.first.id);
+      }
+    } finally {
+      endRequest();
     }
+  }
+
+  void endRequest() {
+    _requestEnd.add(new DateTime.now());
+  }
+
+  void startRequest() {
+    _requestStart.add(new DateTime.now());
   }
 
   sheets.Sheet _createCarsSheet() {
@@ -122,74 +146,97 @@ class GoogleSheetsService {
   }
 
   Future<List<String>> listCars() async {
-    var id = await _sheetId;
-    var range = "'${constants.Cars.sheetName}'!A:A";
-    sheets.ValueRange carsColumn = await _sheetsApi.spreadsheets.values.get(id, range, majorDimension: "COLUMNS");
+    startRequest();
+    try {
+      var id = await _sheetId;
+      var range = "'${constants.Cars.sheetName}'!A:A";
+      sheets.ValueRange carsColumn = await _sheetsApi.spreadsheets.values.get(id, range, majorDimension: "COLUMNS");
 
-    var allRows = carsColumn.values.first;
-    return allRows.skip(1).toList();
+      var allRows = carsColumn.values.first;
+      return allRows.skip(1).toList();
+    } finally {
+      endRequest();
+    }
   }
 
   createNewCar(String newCarName) async {
-    var id = await _sheetId;
+    startRequest();
+    try {
+      var id = await _sheetId;
 
-    var valueRange = new sheets.ValueRange();
-    valueRange.values = [[newCarName]];
-    
-    await _sheetsApi.spreadsheets.values.append(valueRange, id, "'${constants.Cars.sheetName}'!A:A", valueInputOption: "USER_ENTERED");
+      var valueRange = new sheets.ValueRange();
+      valueRange.values = [[newCarName]];
+      await _sheetsApi.spreadsheets.values.append(valueRange, id, "'${constants.Cars.sheetName}'!A:A", valueInputOption: "USER_ENTERED");
+    } finally {
+      endRequest();
+    }
   }
 
   static final StreamController<List<Record>> recordStreamController = new StreamController<List<Record>>.broadcast();
   Stream<List<Record>> get onRecord => recordStreamController.stream;
 
   Future<List<Record>> loadAllRecords() async {
-    var id = await _sheetId;
+    try {
 
-    var values = await _sheetsApi.spreadsheets.values.get(id, "'${constants.FuelUps.sheetName}'!A:F");
-    print(values.values.first);
-    var odoIndex = values.values.first.indexOf(constants.FuelUps.headerOdo);
-    var priceIndex = values.values.first.indexOf(constants.FuelUps.headerPrice);
-    var litresIndex = values.values.first.indexOf(constants.FuelUps.headerLitres);
-    var dateIndex = values.values.first.indexOf(constants.FuelUps.headerDate);
-    var carIndex = values.values.first.indexOf(constants.FuelUps.headerCar);
+      startRequest();
 
-    var dateFormat = new DateFormat("y-M-d H:m:s");
+      var id = await _sheetId;
 
-    var records = values.values.skip(1).map((List row) {
-      return new Record(
-          odo: int.parse(row[odoIndex]),
-          price: double.parse(row[priceIndex]),
-          litres: double.parse(row[litresIndex]),
-          date: dateFormat.parse(row[dateIndex]),
-          car: row[carIndex]
-      );
-    }).toList();
+      var values = await _sheetsApi.spreadsheets.values.get(id, "'${constants.FuelUps.sheetName}'!A:F");
+      print(values.values.first);
+      var odoIndex = values.values.first.indexOf(constants.FuelUps.headerOdo);
+      var priceIndex = values.values.first.indexOf(constants.FuelUps.headerPrice);
+      var litresIndex = values.values.first.indexOf(constants.FuelUps.headerLitres);
+      var dateIndex = values.values.first.indexOf(constants.FuelUps.headerDate);
+      var carIndex = values.values.first.indexOf(constants.FuelUps.headerCar);
 
-    int lastOdo;
-    for (Record r in records) {
-      if (lastOdo != null) {
-        r.l100Km = r.litres / (r.odo-lastOdo) * 100;
+      var dateFormat = new DateFormat("y-M-d H:m:s");
+
+      var records = values.values.skip(1).map((List row) {
+        return new Record(
+            odo: int.parse(row[odoIndex]),
+            price: double.parse(row[priceIndex]),
+            litres: double.parse(row[litresIndex]),
+            date: dateFormat.parse(row[dateIndex]),
+            car: row[carIndex]
+        );
+      }).toList();
+
+      int lastOdo;
+      for (Record r in records) {
+        if (lastOdo != null) {
+          r.l100Km = r.litres / (r.odo-lastOdo) * 100;
+        }
+        lastOdo = r.odo;
       }
-      lastOdo = r.odo;
-    }
 
-    return records.reversed.toList();
+      return records.reversed.toList();
+
+    } finally {
+      endRequest();
+    }
   }
 
   addRecord(Record record) async {
-    var id = await _sheetId;
+    try {
+      startRequest();
+      var id = await _sheetId;
 
-    var valueRange = new sheets.ValueRange();
-    valueRange.values = [[
-      record.car,
-      record.date.toLocal().toString(),
-      record.litres,
-      record.totalPrice / record.litres,
-      record.odo
-    ]];
+      var valueRange = new sheets.ValueRange();
+      valueRange.values = [[
+        record.car,
+        record.date.toLocal().toString(),
+        record.litres,
+        record.totalPrice / record.litres,
+        record.odo
+      ]];
 
-    await _sheetsApi.spreadsheets.values.append(valueRange, id, "'${constants.FuelUps.sheetName}'!A:G", valueInputOption: "USER_ENTERED");
-    loadAllRecords().then((records)=>recordStreamController.add(records));
+      await _sheetsApi.spreadsheets.values.append(valueRange, id, "'${constants.FuelUps.sheetName}'!A:G", valueInputOption: "USER_ENTERED");
+      loadAllRecords().then((records)=>recordStreamController.add(records));
+
+    } finally {
+      endRequest();
+    }
   }
     
 }
