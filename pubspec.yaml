@@ -11,6 +11,7 @@ dependencies:
   googleapis_auth:
   googleapis:
   intl:
+  usage: "^3.0.1"
   
 dev_dependencies:
   browser:

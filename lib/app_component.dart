@@ -6,6 +6,7 @@ import 'dart:html';
 
 import 'package:angular2/core.dart';
 import 'package:angular2_components/angular2_components.dart';
+import 'package:usage/usage_html.dart';
 
 import 'add_record.dart';
 import 'all_records.dart';
@@ -32,6 +33,7 @@ class AppComponent implements OnInit {
     _computeGithubVisible();
     window.onResize.listen(_computeGithubVisible);
 
+    drive.ga.sendScreenView("main");
     await drive.initialized;
   }
 

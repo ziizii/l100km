@@ -8,6 +8,7 @@ import 'package:googleapis_auth/auth_browser.dart';
 import 'package:intl/intl.dart';
 
 import 'constants.dart' as constants;
+import 'package:usage/usage_html.dart';
 
 @Injectable()
 class GoogleSheetsService {
@@ -27,6 +28,7 @@ class GoogleSheetsService {
 
   Future<BrowserOAuth2Flow> _flowFuture;
   BrowserOAuth2Flow _flow;
+  var ga = new AnalyticsHtml("UA-56265300-1", "l100km", "1.0");
 
   GoogleSheetsService() {
     init();
@@ -208,25 +210,19 @@ class GoogleSheetsService {
   }
 
   addRecord(Record record) async {
-    try {
-      startRequest();
-      var id = await _sheetId;
+    var id = await _sheetId;
 
-      var valueRange = new sheets.ValueRange();
-      valueRange.values = [[
-        record.car,
-        record.date.toLocal().toString(),
-        record.litres,
-        record.totalPrice / record.litres,
-        record.odo
-      ]];
-
-      await indicator(_sheetsApi.spreadsheets.values.append(valueRange, id, "'${constants.FuelUps.sheetName}'!A:G", valueInputOption: "USER_ENTERED"));
-      loadAllRecords().then((records)=>recordStreamController.add(records));
-
-    } finally {
-      endRequest();
-    }
+    var valueRange = new sheets.ValueRange();
+    valueRange.values = [[
+      record.car,
+      record.date.toLocal().toString(),
+      record.litres,
+      record.totalPrice / record.litres,
+      record.odo
+    ]];
+    ga.sendEvent("all", "addRecord");
+    await indicator(_sheetsApi.spreadsheets.values.append(valueRange, id, "'${constants.FuelUps.sheetName}'!A:G", valueInputOption: "USER_ENTERED"));
+    loadAllRecords().then((records)=>recordStreamController.add(records));
   }
     
 }

@@ -39,7 +39,7 @@ class AddRecordComponent implements OnInit {
 
   showAddForm() {
     showAddRecordModal = true;
-
+    drive.ga.sendEvent("all", "showModal");
     getInput(odometer)
       ..type = "number"
       ..pattern = "[0-9]*";
