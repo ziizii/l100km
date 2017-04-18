@@ -22,6 +22,12 @@ import 'indicator.dart';
 )
 class AppComponent implements OnInit {
 
+  @ViewChild("addRecord")
+  AddRecordComponent addRecord;
+
+  @ViewChild("allRecords")
+  AllRecordsComponent allRecords;
+
   GoogleSheetsService drive;
 
   AppComponent(this.drive);

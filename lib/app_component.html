@@ -14,9 +14,9 @@
 </div>
 
 <div *ngIf="drive.isLoggedIn">
-    <add-record></add-record>
+    <add-record #addRecord></add-record>
 
-    <all-records></all-records>
+    <all-records #allRecords *ngIf="addRecord.carOptions.isNotEmpty"></all-records>
 </div>
 
 

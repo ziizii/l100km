@@ -21,7 +21,8 @@ class AllRecordsComponent implements OnInit {
 
   @override
   ngOnInit() async {
-     drive.onRecord.listen((records)=>allRecords = records);
+    drive.onRecord.listen((records)=>allRecords = records);
+    drive.loadAllRecords();
   }
 
   int get totalKm {

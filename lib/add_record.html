@@ -2,7 +2,7 @@
     <p>Zatím není vytvořené žádné auto.</p>
 
     <material-input label="Pojmenujte auto" floatingLabel="true" (inputKeyPress)="namedCar($event)"></material-input>
-    <material-button (trigger)="createNewCar()" raised class="blue" *ngIf="!newCar.isEmpty">
+    <material-button (trigger)="createNewCar()" raised class="blue" [disabled]="newCar.isEmpty">
         Vytvořit nové auto
     </material-button>
 </div>

@@ -37,7 +37,8 @@ class AddRecordComponent implements OnInit {
   FormElement get addRecordForm => (querySelector("#recordForm") as FormElement);
   HtmlElement get addRecordButton => (querySelector("#addButton") as HtmlElement);
 
-  showAddForm() {
+  showAddForm() async {
+    selectFirstCarIfNotSelected();
     showAddRecordModal = true;
     drive.ga.sendEvent("all", "showModal");
     getInput(odometer)
@@ -58,11 +59,16 @@ class AddRecordComponent implements OnInit {
   @override
   ngOnInit() async {
     await loadCars();
+    selectFirstCarIfNotSelected();
+  }
 
-    if (carOptions.isNotEmpty) {
+  selectFirstCarIfNotSelected() async {
+    if (!carOptions.isNotEmpty) {
+      await loadCars();
+    }
+    if (carOptions.isNotEmpty && selectedCar.isEmpty) {
       selectedCar.select(carOptions.optionsList.first);
     }
-
   }
 
   loadCars() async {

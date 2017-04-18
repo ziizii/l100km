@@ -60,7 +60,6 @@ class GoogleSheetsService {
       _driveApi = new drive.DriveApi(client);
 
       findSheetId();
-      loadAllRecords().then((records)=>recordStreamController.add(records));
     }
   }
 
@@ -175,7 +174,7 @@ class GoogleSheetsService {
   static final StreamController<List<Record>> recordStreamController = new StreamController<List<Record>>.broadcast();
   Stream<List<Record>> get onRecord => recordStreamController.stream;
 
-  Future<List<Record>> loadAllRecords() async {
+  loadAllRecords() async {
     var id = await _sheetId;
 
     var values = await indicator(_sheetsApi.spreadsheets.values.get(id, "'${constants.FuelUps.sheetName}'!A:F"));
@@ -206,7 +205,7 @@ class GoogleSheetsService {
       lastOdo = r.odo;
     }
 
-    return records.reversed.toList();
+    recordStreamController.add(records.reversed.toList());
   }
 
   addRecord(Record record) async {
@@ -222,7 +221,7 @@ class GoogleSheetsService {
     ]];
     ga.sendEvent("all", "addRecord");
     await indicator(_sheetsApi.spreadsheets.values.append(valueRange, id, "'${constants.FuelUps.sheetName}'!A:G", valueInputOption: "USER_ENTERED"));
-    loadAllRecords().then((records)=>recordStreamController.add(records));
+    loadAllRecords();
   }
     
 }
