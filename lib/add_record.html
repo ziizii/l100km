@@ -22,7 +22,7 @@
                 <material-dropdown-select required [options]="carOptions" [selection]="selectedCar" width="2" [buttonText]="carSelectButtonText">
                 </material-dropdown-select>
                 <div>
-                    <material-input autoFocus #odometer required ngControl="odo" [(ngModel)]="odoValue" trailingText="km" label="Stav tachometru" floatingLabel="true" type="number"></material-input>
+                    <material-input #odometer required ngControl="odo" [(ngModel)]="odoValue" trailingText="km" label="Stav tachometru" floatingLabel="true" type="number"></material-input>
                     <material-input #totalPrice required ngControl="price" [(ngModel)]="priceValue" trailingText="Kč" label="Celková cena" floatingLabel="true" type="number"></material-input>
                     <material-input #litres required ngControl="litres" [(ngModel)]="lValue" trailingText="l" label="Počet litrů" floatingLabel="true" type="number"></material-input>
                 </div>

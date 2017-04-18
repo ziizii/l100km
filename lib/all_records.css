@@ -14,7 +14,7 @@ th {
 }
 
 td, th {
-    padding: 5px;
+    padding: 0.7vw;
 }
 
 .stats td, .stats th {
@@ -34,9 +34,7 @@ table, th, td {
     text-align: left;
 }
 
-
 .record {
-    padding: 0.5em;
     border: 1px solid #dddddd;
     border-top: 0;
 }
@@ -46,11 +44,25 @@ table, th, td {
     border-top: 1px solid #dddddd;
 }
 
-.record .date {
-    font-size: larger;
-    font-weight: bolder;
+.allRecords {
+    margin-bottom: 5em;
 }
 
-.allRecords {
-    margin-bottom: 4em;
+.record table {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+.record table tr td {
+    font-weight: bold;
+    text-align: right;
+}
+.record table tr td:first-child {
+    text-align: left;
+    font-weight: normal;
+}
+
+.record table:first-child {
+    font-size: large;
+    font-weight: bold;
 }

@@ -21,7 +21,6 @@ h1 {
     margin-top: 0;
 }
 
-
 #addButton {
     position: fixed;
 
@@ -36,8 +35,4 @@ h1 {
 #addButton material-ripple {
     background: #2196F3;
 
-}
-
-body {
-    margin-bottom: 25vh;
 }

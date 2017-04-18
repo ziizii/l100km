@@ -5,6 +5,7 @@ import 'package:fuelly_gdocs/constants.dart' as constants;
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:googleapis/sheets/v4.dart' as sheets;
 import 'package:googleapis_auth/auth_browser.dart' as auth;
+import 'package:googleapis_auth/auth_browser.dart';
 import 'package:intl/intl.dart';
 
 @Injectable()
@@ -19,18 +20,29 @@ class GoogleSheetsService {
   static const scopes = const [sheets.SheetsApi.SpreadsheetsScope, drive.DriveApi.DriveReadonlyScope];
   sheets.SheetsApi _sheetsApi;
   drive.DriveApi _driveApi;
-  bool isLoggedIn = false;
-  Future initialized;
+  bool isLoggedIn = null;
 
   auth.ClientId get id => new auth.ClientId(constants.clientId, null);
 
+  Future<BrowserOAuth2Flow> _flowFuture;
+  BrowserOAuth2Flow _flow;
+
   GoogleSheetsService() {
-    initialized = login(withPopup: false);
+    init();
   }
 
+  init() async {
+    _flowFuture = auth.createImplicitBrowserFlow(id, scopes);
+    _flowFuture.then((f){
+      _flow = f;
+      login(withPopup: false);
+    });
+  }
+
+  Future get initialized => _flowFuture;
+
   Future<auth.AutoRefreshingAuthClient> authorizedClient({immediate: true}) async {
-    var flow = await indicator(auth.createImplicitBrowserFlow(id, scopes));
-    var client = flow.clientViaUserConsent(immediate: immediate);
+    var client = (_flow).clientViaUserConsent(immediate: immediate);
     client
         .then((_) => isLoggedIn = true)
         .catchError((e) => print(e));

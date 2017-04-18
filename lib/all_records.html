@@ -20,18 +20,31 @@
 
 <div class="allRecords">
     <div *ngFor="let r of allRecords" class="record">
-        <div class="date">
-            <span><glyph icon="local_gas_station" size="medium"></glyph> {{r.date | date}}</span>
-            <strong class="pull-right"><glyph size="medium" icon="directions_car"></glyph> {{r.odo | km}}&nbsp;km</strong>
-        </div>
-        <div>
-            <span class="price">Celkem {{r.litres | litres}}&nbsp;l * {{r.price | currency}}&nbsp;Kč/l <strong class="pull-right">{{r.litres * r.price | currency}}&nbsp;Kč</strong></span>
-        </div>
-        <div *ngIf="r.l100Km != null">
-            Spotřeba <strong class="pull-right">{{r.l100Km | litres}}&nbsp;l/100km</strong>
-        </div>
 
-        <div class="clear"></div>
+        <table>
+            <tbody>
+            <tr>
+                <td><glyph icon="local_gas_station" size="medium"></glyph> {{r.date | date}}</td>
+                <td><glyph size="medium" icon="directions_car"></glyph> {{r.odo | km}}&nbsp;km</td>
+            </tr>
+            </tbody>
+        </table>
+        <table>
+            <tbody>
+                <tr>
+                    <td>Celkem {{r.litres | litres}}&nbsp;l * {{r.price | currency}}&nbsp;Kč/l</td>
+                    <td>{{r.litres * r.price | currency}}&nbsp;Kč</td>
+                </tr>
+            </tbody>
+        </table>
+        <table *ngIf="r.l100Km != null">
+            <tbody>
+                <tr>
+                    <td>Spotřeba</td>
+                    <td>{{r.l100Km | litres}}&nbsp;l/100km</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 

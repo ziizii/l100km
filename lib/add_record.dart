@@ -39,18 +39,17 @@ class AddRecordComponent implements OnInit {
 
   showAddForm() {
     showAddRecordModal = true;
-    odometer.focus();
 
-    var odoInput = (odometer.inputRef.nativeElement as InputElement);
-    odoInput.type = "number";
-    odoInput.pattern = "[0-9]*";
+    getInput(odometer)
+      ..type = "number"
+      ..pattern = "[0-9]*";
 
-    var priceInput = (totalPrice.inputRef.nativeElement as InputElement);
-    priceInput.type = "number";
-
-    var litresInput = (litres.inputRef.nativeElement as InputElement);
-    litresInput.type = "number";
+    getInput(totalPrice).type = "number";
+    getInput(litres).type = "number";
   }
+
+  InputElement getInput(MaterialInputComponent c) => c.inputRef.nativeElement as InputElement;
+
   hideAddForm() {
     showAddRecordModal = false;
     addRecordForm.reset();
