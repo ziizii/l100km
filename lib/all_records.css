@@ -14,7 +14,7 @@ th {
 }
 
 td, th {
-    padding: 0.7vw 2px;
+    padding: 2px 0.7vw;
 }
 
 .stats td, .stats th {
