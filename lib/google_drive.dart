@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:angular2/core.dart';
-import 'package:fuelly_gdocs/constants.dart' as constants;
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:googleapis/sheets/v4.dart' as sheets;
 import 'package:googleapis_auth/auth_browser.dart' as auth;
 import 'package:googleapis_auth/auth_browser.dart';
 import 'package:intl/intl.dart';
+
+import 'constants.dart' as constants;
 
 @Injectable()
 class GoogleSheetsService {

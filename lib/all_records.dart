@@ -1,8 +1,10 @@
+import 'dart:math';
+
 import 'package:angular2/core.dart';
 import 'package:angular2_components/angular2_components.dart';
-import 'package:fuelly_gdocs/google_drive.dart';
-import 'package:fuelly_gdocs/pipes.dart';
-import 'dart:math';
+
+import 'google_drive.dart';
+import 'pipes.dart';
 
 @Component(selector: 'all-records')
 @View(templateUrl: 'all_records.html',

@@ -3,8 +3,8 @@
 
 import 'package:angular2/platform/browser.dart';
 
-import 'package:fuelly_gdocs/app_component.dart';
-import 'package:fuelly_gdocs/google_drive.dart';
+import 'package:l100km/app_component.dart';
+import 'package:l100km/google_drive.dart';
 
 void main() {
   bootstrap(AppComponent, [

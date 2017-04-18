@@ -3,7 +3,8 @@ import 'dart:html';
 
 import 'package:angular2/angular2.dart';
 import 'package:angular2_components/angular2_components.dart';
-import 'package:fuelly_gdocs/google_drive.dart';
+
+import 'google_drive.dart';
 
 @Component(selector: "indicator")
 @View(templateUrl: 'indicator.html', directives: const [materialDirectives])

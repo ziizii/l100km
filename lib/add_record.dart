@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'package:angular2/core.dart';
 import 'package:angular2_components/angular2_components.dart';
-import 'package:fuelly_gdocs/google_drive.dart';
+import 'google_drive.dart';
 
 @Component(selector: 'add-record')
 @View(templateUrl: "add_record.html", directives: const [materialDirectives], styleUrls: const ['common.css'])
