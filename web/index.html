@@ -1,14 +1,31 @@
 <!DOCTYPE html>
-<html manifest="l100km.manifest">
+<html manifest="l100km.manifest" prefix="og: http://ogp.me/ns#">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <meta property="og:title" content="Aplikace na sledování spotřeby vašeho vozu" />
+    <meta property="og:description" content="1. Sledujte statistiku spotřeby svého vozu 2. ??? 3. Profit" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ziizii.github.io/l100km/" />
+    <meta property="og:image" content="https://ziizii.github.io/l100km/l100km_2x.jpg" />
+    <meta property="og:image:width" content="400" />
+    <meta property="og:image:height" content="300" />
 
     <title>Statistika spotřeby</title>
 
     <script defer src="main.dart" type="application/dart"></script>
     <script defer src="packages/browser/dart.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Material+Icons);
+
+        body {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 2vw;
+            font-family: Helvetica, Arial, sans-serif
+        }
+    </style>
 </head>
 <body>
   <my-app>Načítání...</my-app>

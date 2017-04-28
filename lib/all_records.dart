@@ -1,13 +1,12 @@
 import 'dart:math';
 
 import 'package:angular2/core.dart';
-import 'package:angular2_components/angular2_components.dart';
+import 'package:angular_components/angular_components.dart';
 
 import 'google_drive.dart';
 import 'pipes.dart';
 
-@Component(selector: 'all-records')
-@View(templateUrl: 'all_records.html',
+@Component(selector: 'all-records', templateUrl: 'all_records.html',
     directives: const [materialDirectives],
     pipes: const [CurrencyPipe, DistancePipe, DatePipe, LitresPipe],
     styleUrls: const ['all_records.css', 'common.css']

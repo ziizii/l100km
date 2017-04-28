@@ -1,10 +1,11 @@
 import 'dart:html';
+
 import 'package:angular2/core.dart';
-import 'package:angular2_components/angular2_components.dart';
+import 'package:angular_components/angular_components.dart';
+
 import 'google_drive.dart';
 
-@Component(selector: 'add-record')
-@View(templateUrl: "add_record.html", directives: const [materialDirectives], styleUrls: const ['common.css'])
+@Component(selector: 'add-record', templateUrl: "add_record.html", directives: const [materialDirectives, materialInputDirectives], styleUrls: const ['common.css'])
 class AddRecordComponent implements OnInit {
   GoogleSheetsService drive;
 
@@ -21,10 +22,12 @@ class AddRecordComponent implements OnInit {
 
   StringSelectionOptions<String> carOptions = new StringSelectionOptions([]);
   SelectionModel<String> selectedCar = new SelectionModel.withList(selectedValues: []);
+
   String get carSelectButtonText => selectedCar.selectedValues.isEmpty ? "Vyberte auto" : selectedCar.selectedValues.first;
   bool showAddRecordModal = false;
 
   String newCar = "";
+
   namedCar(String inputText) {
     newCar = inputText;
   }
@@ -35,6 +38,7 @@ class AddRecordComponent implements OnInit {
   }
 
   FormElement get addRecordForm => (querySelector("#recordForm") as FormElement);
+
   HtmlElement get addRecordButton => (querySelector("#addButton") as HtmlElement);
 
   showAddForm() async {
@@ -45,8 +49,8 @@ class AddRecordComponent implements OnInit {
       ..type = "number"
       ..pattern = "[0-9]*";
 
-    getInput(totalPrice).type = "number";
-    getInput(litres).type = "number";
+//    getInput(totalPrice).type = "number";
+//    getInput(litres).type = "number";
   }
 
   InputElement getInput(MaterialInputComponent c) => c.inputRef.nativeElement as InputElement;
@@ -85,7 +89,7 @@ class AddRecordComponent implements OnInit {
     try {
       var rec = new Record(
         odo: int.parse(odoValue),
-        litres:  double.parse(lValue),
+        litres: double.parse(lValue),
         totalPrice: double.parse(priceValue),
         car: selectedCar.selectedValues.first,
       );
@@ -94,7 +98,8 @@ class AddRecordComponent implements OnInit {
 
       error = "";
     } catch (e) {
-      error = "Vytvoření záznamu se nezdařilo. Ujistěte se, že stav tachometru je celé číslo, počet litrů a cena může být desetinné a že máte vybrané auto.";
+      error =
+      "Vytvoření záznamu se nezdařilo. Ujistěte se, že stav tachometru je celé číslo, počet litrů a cena může být desetinné a že máte vybrané auto.";
     }
   }
 

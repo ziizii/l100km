@@ -3,15 +3,15 @@ description: Statistika spořeby
 version: 0.0.1
 
 environment:
-  sdk: '>=1.23.0-dev.11.7'
+  sdk: '>=1.23.0 <2.0.0'
 
 dependencies:
-  angular2: '>=3.0.0-beta'
-  angular2_components: '>=0.4.0-alpha'
-  googleapis_auth:
-  googleapis:
-  intl:
-  usage: "^3.0.1"
+  angular2: '^3.0.0'
+  angular_components: '^0.5.0'
+  googleapis_auth: "^0.2.3"
+  googleapis: "^0.38.0"
+  intl: "^0.15.0"
+  usage: "^3.0.0"
   
 dev_dependencies:
   browser:

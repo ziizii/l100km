@@ -5,8 +5,7 @@ import 'dart:core';
 import 'dart:html';
 
 import 'package:angular2/core.dart';
-import 'package:angular2_components/angular2_components.dart';
-import 'package:usage/usage_html.dart';
+import 'package:angular_components/angular_components.dart';
 
 import 'add_record.dart';
 import 'all_records.dart';

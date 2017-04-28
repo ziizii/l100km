@@ -2,12 +2,11 @@ import 'dart:async';
 import 'dart:html';
 
 import 'package:angular2/angular2.dart';
-import 'package:angular2_components/angular2_components.dart';
+import 'package:angular_components/angular_components.dart';
 
 import 'google_drive.dart';
 
-@Component(selector: "indicator")
-@View(templateUrl: 'indicator.html', directives: const [materialDirectives])
+@Component(selector: "indicator", templateUrl: 'indicator.html', directives: const [materialDirectives])
 class Indicator implements OnInit {
 
   GoogleSheetsService _rest;
